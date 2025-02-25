@@ -10,6 +10,7 @@ This application operates under Fair Use as defined in Section 107 of the U.S. C
 3)Research and commentary on music and digital media
 
 If you are the copyright holder and believe that your work has been used unfairly, please contact us to request its removal.
+---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 
 This is a desktop music player built using Electronjs, html and css
 
