@@ -1,4 +1,5 @@
 COPYRIGHT DISCLAIMER
+
 This application may display images and stream music that are not owned by the developer. All trademarks, copyrights, and intellectual property belong to their respective owners.
 This application operates under Fair Use as defined in Section 107 of the U.S. Copyright Act. The content used in this application is for:
 1)Educational and informational purposes
