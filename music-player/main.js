@@ -6,7 +6,7 @@ let mainWindow;
 app.whenReady().then(() => {
     mainWindow = new BrowserWindow({
         width: 500,
-        height: 750,
+        height: 790,
         icon: path.join(__dirname, 'src/assets/icon/newjeans.ico'),
         frame: false,
         transparent: true,
