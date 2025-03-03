@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title >Enhanced Music Player</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Fascinate+Inline&family=Press+Start+2P&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600&display=swap');
         
         * {
             box-sizing: border-box;
@@ -14,29 +14,100 @@
         }
         
         body {
-            font-family: "Press Start 2P", serif;
-            background: linear-gradient(135deg, #f3d9fa 0%, #e4b8ff 100%);
-            color: #75479b;
+            font-family: "Poppins", sans-serif;
+            background: linear-gradient(135deg, rgba(252, 228, 236, 0.8) 0%, rgba(243, 229, 245, 0.8) 100%);
+            color: rgba(106, 27, 154, 0.9);
             margin: 0;
             display: flex;
             justify-content: center;
             align-items: center;
             min-height: 100vh;
             padding: 20px;
+            -webkit-font-smoothing: antialiased;
+            backdrop-filter: blur(10px);
+        }
+
+        .window-controls {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 38px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 15px;
+            -webkit-app-region: drag;
+            z-index: 1000;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .window-title {
+            font-size: 14px;
+            font-weight: 500;
+            color: rgba(106, 27, 154, 0.8);
+            letter-spacing: 0.5px;
+        }
+
+        .window-buttons {
+            display: flex;
+            gap: 8px;
+            -webkit-app-region: no-drag;
+        }
+
+        .window-button {
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            border: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: transparent;
+            color: #6a1b9a;
+        }
+
+        .window-button:hover {
+            transform: scale(1.1);
+        }
+
+        .window-button.close {
+            background: rgba(255, 128, 171, 0.8);
+            backdrop-filter: blur(5px);
+            color: white;
+        }
+
+        .window-button.close:hover {
+            background: rgba(255, 64, 129, 0.9);
         }
         
         .player-container {
             width: 100%;
             max-width: 380px;
+            margin-top: 50px;
+            perspective: 1000px;
         }
         
         .player {
             width: 100%;
-            background: #fedde4;
+            background: rgba(255, 255, 255, 0.15);
             padding: 25px;
             border-radius: 24px;
-            box-shadow: 0 10px 30px rgba(94, 58, 124, 0.2);
-            backdrop-filter: blur(10px);
+            box-shadow: 
+                0 4px 30px rgba(0, 0, 0, 0.1),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(20px);
+            transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            transform-style: preserve-3d;
+        }
+
+        .player:hover {
+            transform: translateY(-5px) rotateX(5deg);
+            background: rgba(255, 255, 255, 0.2);
         }
         
         .header {
@@ -51,33 +122,38 @@
         }
         
         #song-title {
-            font-size: 0.8rem;
+            font-size: 1rem;
             font-weight: 600;
             margin: 0;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
+            color: #6a1b9a;
         }
         
         .banner-container {
             width: 100%;
             height: 280px;
-            border-radius: 18px;
+            border-radius: 20px;
             overflow: hidden;
             box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             position: relative;
+            transform-style: preserve-3d;
+            transition: transform 0.5s ease;
         }
         
         .banner {
             width: 100%;
             height: 100%;
             object-fit: cover;
-            transition: transform 0.3s ease;
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            filter: brightness(0.95);
         }
         
         .banner:hover {
             transform: scale(1.05);
+            filter: brightness(1.05);
         }
         
         .progress-info {
@@ -89,18 +165,19 @@
         
         #progress-container {
             width: 100%;
-            background: #cfdcec;
-            height: 8px;
+            background: rgba(225, 190, 231, 0.3);
+            height: 6px;
             border-radius: 10px;
-            margin-bottom: 20px;
+            margin-bottom: 25px;
             cursor: pointer;
             position: relative;
+            overflow: hidden;
         }
         
         #progress-bar {
             width: 0%;
             height: 100%;
-            background: linear-gradient(90deg, #d291ff, #9c4dff);
+            background: linear-gradient(90deg, rgba(206, 147, 216, 0.8), rgba(186, 104, 200, 0.8));
             border-radius: 10px;
             transition: width 0.1s;
             position: relative;
@@ -113,7 +190,7 @@
             top: -4px;
             width: 16px;
             height: 16px;
-            background: #9c4dff;
+            background: #ba68c8;
             border-radius: 50%;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.3);
             transform: scale(0);
@@ -156,16 +233,35 @@
         }
         
         .btn-small {
-            width: 24px;
-            height: 24px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(5px);
+            transition: all 0.3s ease;
+        }
+        
+        .btn-small:hover {
+            background: rgba(255, 255, 255, 0.2);
+            transform: scale(1.1);
         }
         
         .btn-large {
             width: 60px;
             height: 60px;
             border-radius: 50%;
-            background: linear-gradient(135deg, #fd0aff, #e1bdef);
-            box-shadow: 0 5px 15px rgba(156, 77, 255, 0.3);
+            background: rgba(225, 190, 231, 0.3);
+            box-shadow: 
+                0 4px 15px rgba(156, 77, 255, 0.2),
+                inset 0 0 0 1px rgba(255, 255, 255, 0.15);
+            backdrop-filter: blur(10px);
+            border: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .btn-large:hover {
+            background: rgba(206, 147, 216, 0.4);
+            transform: scale(1.05);
         }
         
         .button-icon {
@@ -190,34 +286,39 @@
             flex-grow: 1;
             height: 6px;
             -webkit-appearance: none;
-            background:#cfdcec;
+            background: #e1bee7;
             border-radius: 10px;
             outline: none;
         }
         
         .volume-slider::-webkit-slider-thumb {
             -webkit-appearance: none;
-            width: 14px;
-            height: 14px;
+            width: 16px;
+            height: 16px;
             border-radius: 50%;
-            background: #9c4dff;
+            background: #ba68c8;
             cursor: pointer;
+            border: 2px solid white;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
         }
         
         .add-music {
-            background: linear-gradient(90deg, #eabfff, #d291ff);
-            border-radius: 12px;
-            padding: 12px;
+            background: linear-gradient(90deg, #f3e5f5, #e1bee7);
+            border-radius: 16px;
+            padding: 15px;
             display: flex;
             justify-content: space-between;
             align-items: center;
             cursor: pointer;
-            transition: transform 0.2s;
+            transition: all 0.3s ease;
             margin-bottom: 15px;
+            border: 2px solid rgba(255, 255, 255, 0.4);
         }
         
         .add-music:hover {
             transform: translateY(-2px);
+            background: linear-gradient(90deg, #e1bee7, #ce93d8);
+            box-shadow: 0 5px 15px rgba(156, 77, 255, 0.2);
         }
         
         .add-music-text {
@@ -248,22 +349,25 @@
         }
         
         .playlist-item {
+            padding: 12px;
+            margin: 8px 0;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.2s ease;
             display: flex;
             align-items: center;
-            padding: 8px 12px;
-            border-radius: 10px;
-            margin-bottom: 5px;
-            cursor: pointer;
-            transition: background 0.2s;
+            gap: 10px;
         }
         
         .playlist-item:hover {
-            background: rgba(234, 191, 255, 0.3);
+            background: rgba(225, 190, 231, 0.3);
+            transform: translateX(5px);
         }
         
         .playlist-item.active {
-            background: rgba(210, 145, 255, 0.3);
-            font-weight: 500;
+            background: rgba(206, 147, 216, 0.3);
+            border-left: 4px solid #ba68c8;
         }
         
         .playlist-item-title {
@@ -327,8 +431,13 @@
     </style>
 </head>
 <body>
+    <div class="window-controls">
+        <div class="window-title">🎵 Cute Music Player</div>
+        <div class="window-buttons">
+            <button class="window-button close" id="exit-button">✕</button>
+        </div>
+    </div>
     <div class="player-container">
-        <button id="exit-button">❌</button>
         <div class="player">
             <div class="header">
                 <div class="title-wrapper">
@@ -396,6 +505,36 @@
     <audio id="audio-player"></audio>
     
     <script>
+        const { ipcRenderer } = require('electron');
+        
+        // Make the window draggable
+        const draggableArea = document.querySelector('.window-controls');
+        draggableArea.addEventListener('mousedown', (e) => {
+            if (e.target.closest('.window-buttons')) return;
+            ipcRenderer.send('drag-window');
+        });
+
+        // Window control button handlers
+        document.getElementById('exit-button').addEventListener('click', () => {
+            ipcRenderer.send('close-app');
+        });
+
+        // Add smooth animations for UI interactions
+        function addSmoothAnimations() {
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(button => {
+                button.addEventListener('mousedown', () => {
+                    button.style.transform = 'scale(0.95)';
+                });
+                button.addEventListener('mouseup', () => {
+                    button.style.transform = '';
+                });
+                button.addEventListener('mouseleave', () => {
+                    button.style.transform = '';
+                });
+            });
+        }
+
         // DOM Elements
         const audioPlayer = document.getElementById("audio-player");
         const progressBar = document.getElementById("progress-bar");
@@ -729,15 +868,10 @@
         togglePlaylistBtn.addEventListener("click", togglePlaylist);
         
         // Load the player
-        window.onload = initPlayer;
-        document.getElementById('exit-button').addEventListener('click', () => {
-        ipcRenderer.send('close-app');
-        });
-        const { ipcRenderer } = require('electron');
-
-        document.getElementById('exit-button').addEventListener('click', () => {
-            ipcRenderer.send('close-app');
-        });
+        window.onload = () => {
+            initPlayer();
+            addSmoothAnimations();
+        };
     </script>
 </body>
 </html>
