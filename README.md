@@ -14,6 +14,9 @@ If you are the copyright holder and believe that your work has been used unfairl
 
 This is a desktop music player built using Electronjs, html and css
 
+inspired by nashallery
+https://www.youtube.com/shorts/CiunwRaCd4A
+
 prerequisite:
 node 20+
 electron 
@@ -21,6 +24,6 @@ electron
 To run this app
 1) cd music-player
 2) npm install
-3) npm run dev
+3) npm start
 
 
